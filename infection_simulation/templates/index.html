@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infection Simulation - Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🦠 Infection Spread Simulation</h1>
+            <p>Advanced epidemiological modeling platform</p>
+        </div>
+        
+        <div class="content">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for msg in messages %}
+                            <div class="flash-message {{ 'success' if 'successful' in msg else 'error' if 'Invalid' in msg or 'exists' in msg else '' }}">
+                                {{ msg }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <div class="form-section">
+                <h3>🔐 Login to Your Account</h3>
+                <form method="POST" action="/login">
+                    <div class="form-group">
+                        <label for="login-username">Username</label>
+                        <input type="text" id="login-username" name="username" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" name="password" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </form>
+            </div>
+
+            <div class="form-section">
+                <h3>📝 Create New Account</h3>
+                <form method="POST" action="/signup">
+                    <div class="form-group">
+                        <label for="signup-username">Choose Username</label>
+                        <input type="text" id="signup-username" name="username" class="form-control" required>
+                        <div class="input-hint">Username must be unique</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-password">Create Password</label>
+                        <input type="password" id="signup-password" name="password" class="form-control" required>
+                        <div class="input-hint">Choose a secure password</div>
+                    </div>
+                    <button type="submit" class="btn btn-success">Sign Up</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

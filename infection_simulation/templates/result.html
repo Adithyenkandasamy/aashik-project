@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulation Results - Infection Simulation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📈 Simulation Results</h1>
+            <p>Infection spread analysis and timeline</p>
+        </div>
+        
+        <div class="content">
+            <div class="timeline">
+                <h2>⏰ Infection Spread Timeline</h2>
+                {% if timeline %}
+                    <ul class="timeline-list">
+                        {% for region, t in timeline %}
+                            <li class="timeline-item">
+                                <strong>{{ region }}</strong> infected at <strong>Time {{ t }}</strong>
+                                {% if t == 0 %}
+                                    <span style="color: #dc3545; font-weight: bold;"> (Initial Source)</span>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p style="text-align: center; color: #6c757d; font-style: italic;">No infection spread occurred</p>
+                {% endif %}
+            </div>
+
+            <div class="safe-regions {% if not safe_regions %}no-safe-regions{% endif %}">
+                <h3>🛡️ Safe Regions Status</h3>
+                {% if safe_regions %}
+                    <p><strong>Protected Regions:</strong> {{ safe_regions | join(', ') }}</p>
+                    <p style="font-size: 0.9rem; margin-top: 10px;">{{ safe_regions | length }} region(s) remained uninfected</p>
+                {% else %}
+                    <p><strong>⚠️ Total Infection Spread</strong></p>
+                    <p style="font-size: 0.9rem; margin-top: 10px;">All regions have been infected</p>
+                {% endif %}
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="/dashboard" class="nav-link">🔄 Run New Simulation</a>
+                <a href="/logout" class="nav-link btn-secondary" style="margin-left: 15px;">🚪 Logout</a>
+            </div>
+
+            <div class="form-section">
+                <h3>📋 Simulation Summary</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                    <div>
+                        <strong>Total Regions:</strong> {{ timeline | length + safe_regions | length }}
+                    </div>
+                    <div>
+                        <strong>Infected Regions:</strong> {{ timeline | length }}
+                    </div>
+                    <div>
+                        <strong>Safe Regions:</strong> {{ safe_regions | length }}
+                    </div>
+                    <div>
+                        <strong>Max Spread Time:</strong> 
+                        {% if timeline %}
+                            {{ timeline | map(attribute=1) | max }} days
+                        {% else %}
+                            0 days
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

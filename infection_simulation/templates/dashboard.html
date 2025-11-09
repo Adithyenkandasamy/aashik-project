@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Infection Simulation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧪 Simulation Dashboard</h1>
+            <p>Configure and run infection spread models</p>
+        </div>
+        
+        <div class="content">
+            <div class="user-info">
+                <h2>👋 Welcome, {{ session['username'] }}!</h2>
+                <a href="/logout" class="logout-link">Logout</a>
+            </div>
+
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for msg in messages %}
+                            <div class="flash-message error">
+                                {{ msg }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <div class="form-section">
+                <h3>🌍 Configure Infection Simulation</h3>
+                <form method="POST" action="/simulate">
+                    <div class="form-group">
+                        <label for="n">Number of Regions</label>
+                        <input type="number" id="n" name="n" class="form-control" min="1" max="20" required>
+                        <div class="input-hint">Enter between 1 and 20 regions</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="region_names">Region Names</label>
+                        <input type="text" id="region_names" name="region_names" class="form-control" 
+                               placeholder="e.g., New York, London, Tokyo, Mumbai" required>
+                        <div class="input-hint">Comma-separated names (must match number of regions)</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="connections">Region Connections</label>
+                        <input type="text" id="connections" name="connections" class="form-control" 
+                               placeholder="e.g., 0-1,1-2,2-3,0-3" required>
+                        <div class="input-hint">Format: regionIndex-regionIndex (0-based indexing)</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="infected_sources">Initial Infected Regions</label>
+                        <input type="text" id="infected_sources" name="infected_sources" class="form-control" 
+                               placeholder="e.g., 0,2" required>
+                        <div class="input-hint">Comma-separated region indices where infection starts</div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">🔬 Run Simulation</button>
+                </form>
+            </div>
+
+            <div class="form-section">
+                <h3>📊 Example Setup</h3>
+                <p><strong>4 Regions Example:</strong></p>
+                <ul>
+                    <li><strong>Regions:</strong> New York, London, Tokyo, Mumbai</li>
+                    <li><strong>Connections:</strong> 0-1,1-2,2-3,0-3</li>
+                    <li><strong>Initial Infection:</strong> 0</li>
+                </ul>
+                <p>This creates a network where New York (0) connects to London (1) and Mumbai (3), 
+                   London connects to Tokyo (2), and so on.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
